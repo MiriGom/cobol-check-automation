@@ -1,10 +1,7 @@
 #!/bin/bash
 # .github/scripts/zowe_operations.sh
 
-# Convert username to lowercase for directory path
 LOWERCASE_USERNAME=$(echo "$ZOWE_USERNAME" | tr '[:upper:]' '[:lower:]')
-
-# Set mainframe COBOL Check folder
 COBOL_CHECK_FOLDER="cobol-check-0.2.19"
 
 # Check if directory exists; create if it doesn't
