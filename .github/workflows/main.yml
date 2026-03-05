@@ -1,44 +1,23 @@
 name: COBOL Check Automation
 
 on:
-  workflow_dispatch:    # Allows manual trigger from GitHub
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   cobol-check:
-    runs-on: self-hosted       # Must be a machine that can reach your mainframe
+    runs-on: ubuntu-latest  # or windows-latest if on Windows, but needs network access
 
     steps:
-    # Step 1: Checkout repo
     - uses: actions/checkout@v3
 
-    # Step 2: Set up Java
     - name: Set up Java
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '11'
 
-    # Step 3: Install Zowe CLI (if not already installed)
-    - name: Install Zowe CLI
-      run: npm install -g @zowe/cli
+    - name: Make COBOL script executable
+      run: chmod +x .github/scripts/zowe_operations.sh
 
-    # Step 4: Optional: Verify Zowe CLI installation
-    - name: Verify Zowe CLI
-      run: zowe --version
-
-    # Step 5: Run COBOL Check operations
-    - name: Setup Mainframe Environment and Upload COBOL Check
-      env:
-        ZOWE_HOST: ${{ secrets.ZOWE_HOST }}
-        ZOWE_PORT: ${{ secrets.ZOWE_PORT }}
-        ZOWE_USERNAME: ${{ secrets.ZOWE_USERNAME }}
-        ZOWE_PASSWORD: ${{ secrets.ZOWE_PASSWORD }}
-        ZOWE_REJECT_UNAUTHORIZED: false
-      run: |
-        # Make script executable
-        chmod +x .github/scripts/zowe_operations.sh
-
-        # Run the updated script
-        ./.github/scripts/zowe_operations.sh
+    - name: Run COBOL Check script using default profile
+      run: ./.github/scripts/zowe_operations.sh
