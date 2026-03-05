@@ -22,7 +22,7 @@ jobs:
 
     # Step 3: Install Zowe CLI
     - name: Install Zowe CLI
-      run: npm install -g @zowe/cli@lts
+      run: npm install -g @zowe/cli
 
     # Step 4: (Optional) Test Zowe CLI installation
     - name: Test Zowe CLI
