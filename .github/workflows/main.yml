@@ -20,6 +20,15 @@ jobs:
     - name: Install Zowe CLI
       run: npm install -g @zowe/cli
 
+    - name: Configure Zowe Profile
+      run: |
+         zowe profiles create zosmf-profile ibmprofile \
+          --host ${{ secrets.ZOWE_HOST }} \
+          --port 443 \
+          --user ${{ secrets.ZOWE_USERNAME }} \
+          --password ${{ secrets.ZOWE_PASSWORD }} \
+          --reject-unauthorized false
+
     - name: Setup Mainframe Environment and Upload COBOL Check
       env:
         ZOWE_USERNAME: ${{ secrets.ZOWE_USERNAME }}
