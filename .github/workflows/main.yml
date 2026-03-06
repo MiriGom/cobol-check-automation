@@ -9,58 +9,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '11'
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
 
-    - name: Install Zowe CLI
-      run: npm install -g @zowe/cli
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-    - name: Create Zowe config
-      run: |
-        cat <<EOF > zowe.config.json
-        {
-          "profiles": {
-            "LearnCOBOL": {
-              "properties": {
-                "host": "204.90.115.200"
-              },
-              "profiles": {
-                "zosmf": {
-                  "type": "zosmf",
-                  "properties": {
-                    "port": 10443,
-                    "user": "${{ secrets.ZOWE_USERNAME }}",
-                    "password": "${{ secrets.ZOWE_PASSWORD }}"
-                  }
-                }
-              }
-            },
-            "base": {
-              "type": "base",
-              "properties": {
-                "rejectUnauthorized": false
-              }
-            }
-          },
-          "defaults": {
-            "zosmf": "LearnCOBOL.zosmf",
-            "base": "base"
-          }
-        }
-        EOF
-        
-        
-    - name: Setup Mainframe Environment and Upload COBOL Check
-      env:
-        ZOWE_USERNAME: ${{ secrets.ZOWE_USERNAME }}
-        ZOWE_PASSWORD: ${{ secrets.ZOWE_PASSWORD }}
-      run: |
-        echo "ZOWE_USERNAME=$ZOWE_USERNAME"
-        LOWERCASE_USERNAME=$(echo $ZOWE_USERNAME | tr '[:upper:]' '[:lower:]')
-        echo "LOWERCASE_USERNAME=$LOWERCASE_USERNAME"
-        zowe files list uss-files "/z/$LOWERCASE_USERNAME/cobolcheck"
+      - name: Setup Mainframe Environment and Upload COBOL Check
+        env:
+          ZOWE_USERNAME: ${{ secrets.ZOWE_USERNAME }}
+          ZOWE_PASSWORD: ${{ secrets.ZOWE_PASSWORD }}
+        run: |
+          chmod +x .github/scripts/zowe_operations.sh
+          .github/scripts/zowe_operations.sh
