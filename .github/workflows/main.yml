@@ -28,5 +28,5 @@ jobs:
         ZOWE_USERNAME: ${{ secrets.ZOWE_USERNAME }}
         ZOWE_PASSWORD: ${{ secrets.ZOWE_PASSWORD }}
       run: |
-       chmod +x .github/scripts/zowe_operations.sh
-       .github/scripts/zowe_operations.sh
+        LOWERCASE_USERNAME=$(echo $ZOWE_USERNAME | tr '[:upper:]' '[:lower:]')
+        zowe zos-files create uss-directory /z/$LOWERCASE_USERNAME/cobolcheck
