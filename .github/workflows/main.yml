@@ -18,9 +18,21 @@ jobs:
         java-version: '11'
 
     - name: Install Zowe CLI
+      run: npm install -g @zowe/cli
+
+    - name: Create Zowe Profile
       run: |
-        npm install -g @zowe/cli
-        zowe --version
+       zowe profiles create zosmf mainframe \
+        --host ${{ secrets.ZOWE_HOST }} \
+        --port 10443 \
+        --user ${{ secrets.ZOWE_USERNAME }} \
+        --password ${{ secrets.ZOWE_PASSWORD }} \
+        --ru false
+
+       zowe profiles set zosmf mainframe
+
+    - name: Test Connectivity
+      run: zowe files list ds "ZXP.PUBLIC.*"
 
     - name: Run COBOL Check
       env:
