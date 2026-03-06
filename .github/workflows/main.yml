@@ -55,10 +55,12 @@ jobs:
         EOF
         
         
-    - name: Setup mainframe
+    - name: Setup Mainframe Environment and Upload COBOL Check
       env:
         ZOWE_USERNAME: ${{ secrets.ZOWE_USERNAME }}
         ZOWE_PASSWORD: ${{ secrets.ZOWE_PASSWORD }}
       run: |
+        echo "ZOWE_USERNAME=$ZOWE_USERNAME"
         LOWERCASE_USERNAME=$(echo $ZOWE_USERNAME | tr '[:upper:]' '[:lower:]')
-        zowe files create uss-directory /z/$LOWERCASE_USERNAME/cobolcheck
+        echo "LOWERCASE_USERNAME=$LOWERCASE_USERNAME"
+        zowe files list uss-files "/z/$LOWERCASE_USERNAME/cobolcheck"
