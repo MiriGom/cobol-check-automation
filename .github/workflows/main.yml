@@ -1,11 +1,12 @@
 name: COBOL Check Automation
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   cobol-check:
-    runs-on: ubuntu-latest  # or windows-latest if on Windows, but needs network access
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -16,8 +17,9 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
-    - name: Make COBOL script executable
-      run: chmod +x .github/scripts/zowe_operations.sh
-
-    - name: Run COBOL Check script using default profile
-      run: ./.github/scripts/zowe_operations.sh
+    - name: Run COBOL Check
+      env:
+        ZOWE_USERNAME: ${{ secrets.ZOWE_USERNAME }}
+        ZOWE_PASSWORD: ${{ secrets.ZOWE_PASSWORD }}
+      run: |
+        # Here we'll add our commands
